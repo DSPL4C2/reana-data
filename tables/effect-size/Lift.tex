@@ -1,24 +1,24 @@
-\begin{tabular}{llrrllrrll}
+\begin{tabular}{llrrrrllrrrrll}
 \toprule
-{} &    Model &  Reana Runtime (s) &  ReanaE Runtime (s) &       H0 & Effect Size &  Reana Memory Usage (MB) &  ReanaE Memory Usage (MB) &       H0 & Effect Size \\
+{} &    Model &  Reana Runtime (s) &      std1 &  ReanaE Runtime (s) &      std2 &       H0 & Effect Size &  Reana Memory Usage (MB) &       std1 &  ReanaE Memory Usage (MB) &       std2 &       H0 & Effect Size \\
 \midrule
-0  &   Lift 0 &           0.476727 &            0.442455 &  Confirm &       Small &                32.681621 &                 32.685882 &   Reject &       Large \\
-1  &   Lift 1 &           0.432636 &            0.378000 &  Confirm &       Large &                33.636013 &                 31.546253 &   Reject &       Large \\
-2  &   Lift 2 &           0.420091 &            0.385273 &   Reject &       Large &                33.630912 &                 32.659993 &   Reject &       Large \\
-3  &   Lift 3 &           0.431455 &            0.376545 &   Reject &       Large &                34.585216 &                 32.657333 &   Reject &       Large \\
-4  &   Lift 4 &           0.528455 &            0.398636 &  Confirm &       Large &                35.592257 &                 33.619337 &   Reject &       Large \\
-5  &   Lift 5 &           0.485455 &            0.424182 &   Reject &       Large &                37.617401 &                 34.588459 &   Reject &       Large \\
-6  &   Lift 6 &           0.545818 &            0.462455 &   Reject &       Large &                40.657333 &                 37.617401 &   Reject &       Small \\
-7  &   Lift 7 &           0.616364 &            0.564182 &   Reject &       Large &                46.679091 &                 42.578884 &   Reject &       Large \\
-8  &   Lift 8 &           0.832182 &            0.777909 &   Reject &       Large &                27.544223 &                 51.537537 &   Reject &       Large \\
-9  &   Lift 9 &           1.240727 &            1.212000 &  Confirm &      Medium &                40.033294 &                 33.205025 &   Reject &       Large \\
-10 &  Lift 10 &           3.015182 &            2.261545 &   Reject &       Large &                49.117543 &                 40.119849 &   Reject &       Large \\
-11 &  Lift 11 &           5.563818 &            4.456364 &   Reject &       Large &               123.893461 &                 46.668990 &   Reject &       Large \\
-12 &  Lift 12 &           9.797091 &            9.743000 &  Confirm &      Medium &               332.885524 &                218.004483 &   Reject &       Large \\
-13 &  Lift 13 &          20.182273 &           20.761636 &   Reject &       Large &               237.524688 &                567.717020 &   Reject &       Large \\
-14 &  Lift 14 &          42.515909 &           47.833182 &   Reject &       Large &               738.335938 &                545.408425 &   Reject &       Large \\
-15 &  Lift 15 &          90.305182 &          112.421636 &   Reject &       Large &              1027.697089 &               1059.151101 &  Confirm &       Large \\
-16 &  Lift 16 &         189.063818 &          243.523727 &   Reject &       Large &              1750.241122 &               2177.514560 &   Reject &       Large \\
-17 &  Lift 17 &         406.352636 &          530.428000 &   Reject &       Large &              3402.242188 &               4594.060369 &   Reject &       Large \\
+0  &   Lift 0 &           0.476727 &  0.175511 &            0.442455 &  0.105600 &  Confirm &          -- &                32.681621 &   0.003758 &                 32.685882 &   0.002246 &   Reject &      Medium \\
+1  &   Lift 1 &           0.432636 &  0.076796 &            0.378000 &  0.017168 &  Confirm &          -- &                33.636013 &   0.006012 &                 31.546253 &   0.008142 &   Reject &       Large \\
+2  &   Lift 2 &           0.420091 &  0.029755 &            0.385273 &  0.010226 &   Reject &       Large &                33.630912 &   0.008342 &                 32.659993 &   0.008411 &   Reject &       Large \\
+3  &   Lift 3 &           0.431455 &  0.054175 &            0.376545 &  0.021673 &   Reject &       Large &                34.585216 &   0.000050 &                 32.657333 &   0.000000 &   Reject &       Large \\
+4  &   Lift 4 &           0.528455 &  0.150878 &            0.398636 &  0.020424 &  Confirm &          -- &                35.592257 &   0.003479 &                 33.619337 &   0.006170 &   Reject &       Large \\
+5  &   Lift 5 &           0.485455 &  0.086727 &            0.424182 &  0.023648 &   Reject &      Medium &                37.617401 &   0.000000 &                 34.588459 &   0.008074 &   Reject &       Large \\
+6  &   Lift 6 &           0.545818 &  0.061314 &            0.462455 &  0.009755 &   Reject &       Large &                40.657333 &   0.000000 &                 37.617401 &   0.000000 &   Reject &       Large \\
+7  &   Lift 7 &           0.616364 &  0.064508 &            0.564182 &  0.021139 &   Reject &       Large &                46.679091 &   0.321357 &                 42.578884 &   0.004477 &   Reject &       Large \\
+8  &   Lift 8 &           0.832182 &  0.099293 &            0.777909 &  0.045260 &   Reject &      Medium &                27.544223 &   0.000214 &                 51.537537 &   0.000000 &   Reject &       Large \\
+9  &   Lift 9 &           1.240727 &  0.064285 &            1.212000 &  0.032577 &  Confirm &          -- &                40.033294 &   0.002786 &                 33.205025 &   0.006131 &   Reject &       Large \\
+10 &  Lift 10 &           3.015182 &  0.065549 &            2.261545 &  0.051908 &   Reject &       Large &                49.117543 &   1.022664 &                 40.119849 &   0.098430 &   Reject &       Large \\
+11 &  Lift 11 &           5.563818 &  0.160570 &            4.456364 &  0.080383 &   Reject &       Large &               123.893461 &   9.686153 &                 46.668990 &   1.183047 &   Reject &       Large \\
+12 &  Lift 12 &           9.797091 &  0.173483 &            9.743000 &  0.109003 &  Confirm &          -- &               332.885524 &   9.471014 &                218.004483 &   2.524090 &   Reject &       Large \\
+13 &  Lift 13 &          20.182273 &  0.202871 &           20.761636 &  0.428690 &   Reject &       Large &               237.524688 &   1.615454 &                567.717020 &   3.429035 &   Reject &       Large \\
+14 &  Lift 14 &          42.515909 &  0.205940 &           47.833182 &  0.718890 &   Reject &       Large &               738.335938 &   2.870380 &                545.408425 &  11.104915 &   Reject &       Large \\
+15 &  Lift 15 &          90.305182 &  0.562713 &          112.421636 &  1.921040 &   Reject &       Large &              1027.697089 &  18.820191 &               1059.151101 &  35.706337 &  Confirm &          -- \\
+16 &  Lift 16 &         189.063818 &  0.957163 &          243.523727 &  3.057988 &   Reject &       Large &              1750.241122 &  42.598120 &               2177.514560 &  15.758137 &   Reject &       Large \\
+17 &  Lift 17 &         406.352636 &  2.993277 &          530.428000 &  3.114615 &   Reject &       Large &              3402.242188 &  25.314428 &               4594.060369 &  47.496212 &   Reject &       Large \\
 \bottomrule
 \end{tabular}
