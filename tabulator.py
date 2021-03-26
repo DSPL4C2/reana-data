@@ -5,7 +5,7 @@ from utils import get_means_df, get_num_evolutions, isnan
 from functools import reduce
 
 
-def get_table(df, labels, title=None, items_per_row=0, bolded=None):
+def get_table(df, labels, title=None, items_per_row=0, bolded=None, index_offset=0):
     # generating lines and headers/separators
     lines = {}
     mdf = get_means_df(df, labels)
@@ -15,13 +15,13 @@ def get_table(df, labels, title=None, items_per_row=0, bolded=None):
         lines[label] = get_lines_for_label(
             mdf, label, n, items_per_row, bolded)
 
-    header = format_row([' Type '] + [' ' + str(i) +
+    header = format_row([' Type '] + [' ' + str(i + index_offset) +
                         ' ' for i in range(items_per_row)])
     first_separator = format_row(['---' for i in range(items_per_row + 1)])
     last_separator = format_row(['---' for i in range(items_per_row + 1)])
     separator = (
         lambda k:
-            format_row([' --- '] + [' ' + (str(i) if i < n else '---') +
+            format_row([' --- '] + [' ' + (str(i + index_offset) if i < n else '---') +
                        ' ' for i in range(items_per_row * k, items_per_row * (k + 1))])
     )
     separators = [first_separator] + \

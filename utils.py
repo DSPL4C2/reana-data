@@ -28,6 +28,9 @@ def get_num_evolutions(df):
     label = df['Label'][0]
     return df.loc[label].shape[1] - 1  # exclude type column
 
+def get_evolution_indices(df):
+    return np.array(df.columns[:-1]) # exclude 'Label' column
+
 
 def get_evolution_samples(df, n, label):
     s = df.iloc[:][n].loc[label]

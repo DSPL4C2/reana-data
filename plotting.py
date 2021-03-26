@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', ylabel='y', filename=None):
+def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', ylabel='y', xticks=None, filename=None):
     means = []
     stds = []
 
@@ -19,6 +19,9 @@ def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', yl
 
     axs = []
 
+    # if xticks is None:
+    #     xticks = np.arange(0, df_mean[labels[0]].shape[0], 1)
+
     for i in range(len(labels)):
         label = labels[i]
         if i == 0:
@@ -30,10 +33,9 @@ def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', yl
 
         axs.append(ax)
 
-    xticks = np.arange(0, df_mean[labels[0]].shape[0], 1)
-
-    for ax in axs:
-        ax.set_xticks(xticks)
+    if xticks is not None:
+        for ax in axs:
+            ax.set_xticks(xticks)
 
     # plt.legend(h1+h2, l1+l2, loc=2)
     plt.legend()

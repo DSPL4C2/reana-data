@@ -23,10 +23,11 @@ def out_to_csv(in_filename, out_filename):
                     out_f.write("{},".format(data[i][j]))
 
 
-def _read_data(spl, filenames, labels, factor=1.0, trim_rows=True, trim_columns=False):
+def _read_data(spl, filenames, labels, factor=1.0, trim_rows=True, trim_columns=False, index_offset=0):
     dfs = []
     for filename in filenames:
         df = pd.read_csv(filename, header=None).transpose()
+        df.columns = np.arange(index_offset, df.shape[1] + index_offset)
         dfs.append(df)
 
     if trim_rows:
@@ -51,8 +52,8 @@ def _read_data(spl, filenames, labels, factor=1.0, trim_rows=True, trim_columns=
     return df, n
 
 
-def read_data(spl, filenames, labels, factor=1.0, trim_rows=True, trim_columns=False):
+def read_data(spl, filenames, labels, factor=1.0, trim_rows=True, trim_columns=False, index_offset=0):
     df, n = _read_data(spl, filenames, labels, factor=factor,
-                       trim_rows=trim_rows, trim_columns=trim_columns)
+                       trim_rows=trim_rows, trim_columns=trim_columns, index_offset=index_offset)
     df['Label'] = np.repeat(labels, np.repeat([n], len(labels)), axis=0)
     return df

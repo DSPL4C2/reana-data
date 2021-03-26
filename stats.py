@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from utils import concat, get_num_evolutions, get_evolution_samples
+from utils import concat, get_num_evolutions, get_evolution_indices, get_evolution_samples
 from math import sqrt
 from scipy.stats import bartlett, ttest_ind, mannwhitneyu, normaltest
 import itertools as iter
@@ -43,7 +43,7 @@ def test_all_evolutions_pairs(df, labels):
 
 def test_all_evolutions(df, t1, t2):
     n = get_num_evolutions(df)
-    return [test(df, i, t1, t2) for i in range(n)]
+    return [test(df, i, t1, t2) for i in get_evolution_indices(df)]
 
 
 def test(df, i, t1, t2):
@@ -54,20 +54,6 @@ def test(df, i, t1, t2):
         return None
     else:
         return compare_samples(s1, s2)
-
-
-# def print_test_results(t1, t2, comparison, verbose=False):
-#     if verbose:
-#         print('{}\t{}'.format(i, comparison))
-#     else:
-#         if comparison is None:
-#             print('No samples')
-#         elif result['result'] == 'eq':
-#             print('{} == {}'.format(t1, t2))
-#         elif result['result'] == 'lt':
-#             print('{} > {}'.format(t1, t2))
-#         elif result['result'] == 'gt':
-#             print('{} < {}'.format(t1, t2))
 
 
 def test_min(ordering):
@@ -130,7 +116,7 @@ def process_effect_size(d):
     return dists[0][0]
 
 
-def get_test_comparison_df(df, l1, l2, suffix=None):
+def get_test_comparison_df(df, l1, l2, suffix=None, model=None):
     tests = test_all_evolutions(df, l1, l2)
     comparisons = [test['result'] for test in tests if test is not None]
 
@@ -142,7 +128,7 @@ def get_test_comparison_df(df, l1, l2, suffix=None):
     effect_size = [process_effect_size(test['d'])
                    for test in tests if test is not None]
     # hypothesis: assume that both labels obtain the same result
-    hypothesis_results = ['Confirm' if x ==
+    hypothesis_results = ['Not Reject' if x ==
                           'eq' else 'Reject' for x in comparisons]
 
     label1 = l1 if suffix is None else '{} {}'.format(l1, suffix)
@@ -150,7 +136,16 @@ def get_test_comparison_df(df, l1, l2, suffix=None):
 
     data = {label1: avg1, 'std1': std1, label2: avg2, 'std2': std2,
             'H0': hypothesis_results, 'Effect Size': effect_size}
-    return pd.DataFrame(data=data)
+    test_df = pd.DataFrame(data=data)
+    if model is None:
+        return test_df
+
+    else:
+        n = get_num_evolutions(df)
+        model_labels = ['{} {}'.format(model, i) for i in range(n)]
+        model_df = pd.DataFrame({'Model': model_labels})
+
+        return pd.concat([model_df, test_df], axis=1)
 
 
 def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None):
@@ -163,9 +158,15 @@ def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None)
     if (n1 != n2):
         print("Warning: number of evolutions in df1 and df2 do not match")
 
-    model_labels = ['{} {}'.format(model, i) for i in range(n1)]
-    model_df = pd.DataFrame({'Model': model_labels})
+    idx1 = get_evolution_indices(df1)
+    idx2 = get_evolution_indices(df2)
 
+    if (not np.all(idx1 == idx2)):
+        print("Warning: column indices in df1 and df2 do not match")
+
+    model_labels = ['{} {}'.format(model, i) for i in idx1]
+    model_df = pd.DataFrame({'Model': model_labels})
+    model_df.index = idx1
     return pd.concat([model_df, test_df1, test_df2], axis=1)
 
 
