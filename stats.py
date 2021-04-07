@@ -1,9 +1,10 @@
 import pandas as pd
 import numpy as np
+import itertools as iter
 from utils import concat, get_num_evolutions, get_evolution_samples
 from math import sqrt
 from scipy.stats import bartlett, ttest_ind, mannwhitneyu, normaltest
-import itertools as iter
+from sigfigs import format_value_error
 
 
 def compare_samples(s1, s2, significance=0.01):
@@ -54,20 +55,6 @@ def test(df, i, t1, t2):
         return None
     else:
         return compare_samples(s1, s2)
-
-
-# def print_test_results(t1, t2, comparison, verbose=False):
-#     if verbose:
-#         print('{}\t{}'.format(i, comparison))
-#     else:
-#         if comparison is None:
-#             print('No samples')
-#         elif result['result'] == 'eq':
-#             print('{} == {}'.format(t1, t2))
-#         elif result['result'] == 'lt':
-#             print('{} > {}'.format(t1, t2))
-#         elif result['result'] == 'gt':
-#             print('{} < {}'.format(t1, t2))
 
 
 def test_min(ordering):
@@ -129,8 +116,7 @@ def process_effect_size(d):
     dists.sort(key=lambda item: item[1])
     return dists[0][0]
 
-
-def get_test_comparison_df(df, l1, l2, suffix=None):
+def get_test_comparison_df(df, l1, l2, suffix=None, errors=True, formatting=None):
     tests = test_all_evolutions(df, l1, l2)
     comparisons = [test['result'] for test in tests if test is not None]
 
@@ -142,20 +128,41 @@ def get_test_comparison_df(df, l1, l2, suffix=None):
     effect_size = [process_effect_size(test['d'])
                    for test in tests if test is not None]
     # hypothesis: assume that both labels obtain the same result
-    hypothesis_results = ['Confirm' if x ==
+    hypothesis_results = ['Not Reject' if x ==
                           'eq' else 'Reject' for x in comparisons]
 
     label1 = l1 if suffix is None else '{} {}'.format(l1, suffix)
     label2 = l2 if suffix is None else '{} {}'.format(l2, suffix)
 
-    data = {label1: avg1, 'std1': std1, label2: avg2, 'std2': std2,
-            'H0': hypothesis_results, 'Effect Size': effect_size}
+    lines1 = []
+    lines2 = []
+
+    for i in range(0, len(avg1)):
+        if errors:
+            line1 = format_value_error(avg1[i], std1[i])
+            line2 = format_value_error(avg2[i], std2[i])
+        else:
+            line1 = '{:.2f}'.format(avg1[i])
+            line2 = '{:.2f}'.format(avg2[i])
+
+        if formatting == 'markdown':
+            line1 = f'**{line1}**' if comparisons[i] == 'lt' else line1
+            line2 = f'**{line2}**' if comparisons[i] == 'gt' else line2
+        elif formatting == 'latex':
+            line1 = '\\textbf{{{}}}'.format(line1) if comparisons[i] == 'lt' else line1
+            line2 = '\\textbf{{{}}}'.format(line2) if comparisons[i] == 'gt' else line2
+
+        lines1.append(line1)
+        lines2.append(line2)
+
+    # data = {label1: lines1, label2: lines2,
+    #         'H0': hypothesis_results, 'Effect Size': effect_size}
+    data = {label1: lines1, label2: lines2, 'Effect Size': effect_size}
     return pd.DataFrame(data=data)
 
-
-def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None):
-    test_df1 = get_test_comparison_df(df1, l1, l2, suffix=suffix1)
-    test_df2 = get_test_comparison_df(df2, l1, l2, suffix=suffix2)
+def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None, errors1=True, errors2=True, formatting=None):
+    test_df1 = get_test_comparison_df(df1, l1, l2, suffix=suffix1, errors=errors1, formatting=formatting)
+    test_df2 = get_test_comparison_df(df2, l1, l2, suffix=suffix2, errors=errors2, formatting=formatting)
 
     n1 = get_num_evolutions(df1)
     n2 = get_num_evolutions(df2)
@@ -167,7 +174,6 @@ def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None)
     model_df = pd.DataFrame({'Model': model_labels})
 
     return pd.concat([model_df, test_df1, test_df2], axis=1)
-
 
 def is_normally_distributed(samples, significance=0.01):
     x, p = normaltest(samples)
