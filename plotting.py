@@ -36,7 +36,7 @@ def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', yl
                     grid=True, secondary_y=False, yerr=df_std[label], label=label, color=[colors[i]])
             else:
                 ax = df_mean[label].plot(
-                    grid=True, secondary_y=False, yerr=df_std[label], label=label, color=[colors[i]]) 
+                    grid=True, secondary_y=False, yerr=df_std[label], label=label) 
 
         ax.set_xticks(xticks)
         axs.append(ax)
