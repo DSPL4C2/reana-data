@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
-
-def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', ylabel='y', filename=None):
+def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', ylabel='y', filename=None, colors=None):
     means = []
     stds = []
 
@@ -15,25 +15,31 @@ def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', yl
     df_mean = pd.concat(means, keys=labels)
     df_std = pd.concat(stds, keys=labels)
 
-    plt.figure(figsize=(12, 5))  # TODO: is this OK?
+    plt.figure(figsize=(12, 5))
+
+    xticks = np.arange(0, df_mean[labels[0]].shape[0], 1)
 
     axs = []
 
     for i in range(len(labels)):
         label = labels[i]
         if i == 0:
-            ax = df_mean[label].plot(
-                grid=True, yerr=df_std[label], label=label)
+            if colors:
+                ax = df_mean[label].plot(
+                    grid=True, yerr=df_std[label], label=label, color=[colors[i]])
+            else:
+                ax = df_mean[label].plot(
+                    grid=True, yerr=df_std[label], label=label)
         else:
-            ax = df_mean[label].plot(
-                grid=True, secondary_y=False, yerr=df_std[label], label=label)
+            if colors:
+                ax = df_mean[label].plot(
+                    grid=True, secondary_y=False, yerr=df_std[label], label=label, color=[colors[i]])
+            else:
+                ax = df_mean[label].plot(
+                    grid=True, secondary_y=False, yerr=df_std[label], label=label, color=[colors[i]]) 
 
-        axs.append(ax)
-
-    xticks = np.arange(0, df_mean[labels[0]].shape[0], 1)
-
-    for ax in axs:
         ax.set_xticks(xticks)
+        axs.append(ax)
 
     # plt.legend(h1+h2, l1+l2, loc=2)
     plt.legend()
