@@ -14,7 +14,7 @@ def get_pairwise_graphs(spl, labels):
    factor = 1e-3
    rt_df = read_data(spl, rt_filenames, labels, factor=factor)    
 
-   colors = ['red', 'green', 'blue']
+   colors = ['darkorange', 'darkviolet', 'royalblue']
    for items in iter.combinations(zip(labels, colors), 2):
        pair = [item[0] for item in items]
        color = [item[1] for item in items]
