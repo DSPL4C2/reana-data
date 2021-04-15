@@ -7,9 +7,35 @@ from plotting import *
 from stats import *
 from tabulator import *
 
-def plot_spl(spl):
-    labels = ['Reana', 'ReanaE', 'ReanaEOrd']
+def get_pairwise_graphs(spl, labels):
+   display(Markdown('# {}'.format(spl)))
+   rt_filenames = [
+       'csv/running_time/totalTime{}{}.csv'.format(spl, label) for label in labels]
+   factor = 1e-3
+   rt_df = read_data(spl, rt_filenames, labels, factor=factor)    
 
+   colors = ['red', 'green', 'blue']
+   for items in iter.combinations(zip(labels, colors), 2):
+       pair = [item[0] for item in items]
+       color = [item[1] for item in items]
+       display(Markdown('## {} x {}'.format(pair[0], pair[1])))
+       title = '{}: Running Time ({} x {})'.format(spl, pair[0], pair[1])
+       xlabel = 'Evolution'
+       ylabel = 'Running Time (s)'
+       make_line_graph(rt_df, spl, pair, title=title,
+                   xlabel=xlabel, ylabel=ylabel, yscale='log', filename=f'pairwise-graphs/{spl}-{pair[0]}-{pair[1]}.png', colors=color)
+
+       mem_filenames = [
+           'csv/memory_usage/totalMemory{}{}.csv'.format(spl, label) for label in labels]
+       mem_df = read_data(spl, mem_filenames, labels)
+
+       title = '{}: Memory Usage ({} x {})'.format(spl, pair[0], pair[1])
+       xlabel = 'Evolution'
+       ylabel = 'Memory Usage (MB)'
+       make_line_graph(mem_df, spl, pair, title=title,
+                   xlabel=xlabel, ylabel=ylabel, yscale='log', filename=f'pairwise-graphs/{spl}-{pair[0]}-{pair[1]}.png', colors=color)
+
+def plot_spl(spl, labels):
     display(Markdown('# {}'.format(spl)))
     rt_filenames = [
         'csv/running_time/totalTime{}{}.csv'.format(spl, label) for label in labels]
@@ -49,11 +75,11 @@ def process(df, spl, labels, title, header=None, xlabel='Evolution', ylabel='', 
     if header:
         display(Markdown('## {}'.format(header)))
     make_line_graph(df, spl, labels, title=title,
-                    xlabel=xlabel, ylabel=ylabel, yscale='log')
+                    xlabel=xlabel, ylabel=ylabel, yscale='log', filename=f'graphs/{spl}.png')
 
     test_results = test_all_evolutions_pairs(df, labels)
 
-    make_box_plot(df, spl, title=title)
+    make_box_plot(df, spl, title=title, filename=f'boxplots/{spl}.png')
 
     orderings = get_orderings(test_results)
 
@@ -68,6 +94,7 @@ def process(df, spl, labels, title, header=None, xlabel='Evolution', ylabel='', 
 
     if table_description:
         display(Markdown(table_description))
+
     table = get_table(df, labels, title=None,
                       items_per_row=items_per_row, bolded=mins)
 
