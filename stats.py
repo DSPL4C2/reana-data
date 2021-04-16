@@ -160,7 +160,7 @@ def get_test_comparison_df(df, l1, l2, suffix=None, errors=True, formatting=None
     data = {label1: lines1, label2: lines2, 'Effect Size': effect_size}
     return pd.DataFrame(data=data)
 
-def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None, errors1=True, errors2=True, formatting=None):
+def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None, errors1=True, errors2=True, formatting=None, idx_offset=0):
     test_df1 = get_test_comparison_df(df1, l1, l2, suffix=suffix1, errors=errors1, formatting=formatting)
     test_df2 = get_test_comparison_df(df2, l1, l2, suffix=suffix2, errors=errors2, formatting=formatting)
 
@@ -170,7 +170,7 @@ def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None,
     if (n1 != n2):
         print("Warning: number of evolutions in df1 and df2 do not match")
 
-    model_labels = ['{} {}'.format(model, i) for i in range(n1)]
+    model_labels = ['{} {}'.format(model, i) for i in range(idx_offset, n1 + idx_offset)]
     model_df = pd.DataFrame({'Model': model_labels})
 
     return pd.concat([model_df, test_df1, test_df2], axis=1)
