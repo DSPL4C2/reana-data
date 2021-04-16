@@ -3,7 +3,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', ylabel='y', filename=None, colors=None):
+def make_line_graph(df, spl, labels, title=None,
+    yscale='linear', xlabel='x', ylabel='y',
+    xoffset=0, filename=None, colors=None):
+
     means = []
     stds = []
 
@@ -18,6 +21,7 @@ def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', yl
     plt.figure(figsize=(12, 5))
 
     xticks = np.arange(0, df_mean[labels[0]].shape[0], 1)
+    xticks_labels = np.arange(xoffset, df_mean[labels[0]].shape[0] + xoffset, 1) 
 
     axs = []
 
@@ -39,6 +43,7 @@ def make_line_graph(df, spl, labels, title=None, yscale='linear', xlabel='x', yl
                     grid=True, secondary_y=False, yerr=df_std[label], label=label) 
 
         ax.set_xticks(xticks)
+        ax.set_xticklabels(xticks_labels)
         axs.append(ax)
 
     # plt.legend(h1+h2, l1+l2, loc=2)

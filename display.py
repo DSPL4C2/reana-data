@@ -7,7 +7,7 @@ from plotting import *
 from stats import *
 from tabulator import *
 
-def get_pairwise_graphs(spl, labels):
+def get_pairwise_graphs(spl, labels, xoffset=0):
    display(Markdown('# {}'.format(spl)))
    rt_filenames = [
        'csv/running_time/totalTime{}{}.csv'.format(spl, label) for label in labels]
@@ -23,7 +23,8 @@ def get_pairwise_graphs(spl, labels):
        xlabel = 'Evolution'
        ylabel = 'Running Time (s)'
        make_line_graph(rt_df, spl, pair, title=title,
-                   xlabel=xlabel, ylabel=ylabel, yscale='log', filename=f'pairwise-graphs/{spl}-{pair[0]}-{pair[1]}.png', colors=color)
+                   xlabel=xlabel, ylabel=ylabel, yscale='log', xoffset=xoffset, 
+                   filename=f'pairwise-graphs/{spl}-{pair[0]}-{pair[1]}.png', colors=color)
 
        mem_filenames = [
            'csv/memory_usage/totalMemory{}{}.csv'.format(spl, label) for label in labels]
@@ -33,23 +34,24 @@ def get_pairwise_graphs(spl, labels):
        xlabel = 'Evolution'
        ylabel = 'Memory Usage (MB)'
        make_line_graph(mem_df, spl, pair, title=title,
-                   xlabel=xlabel, ylabel=ylabel, yscale='log', filename=f'pairwise-graphs/{spl}-{pair[0]}-{pair[1]}.png', colors=color)
+                   xlabel=xlabel, ylabel=ylabel, yscale='log', xoffset=xoffset,
+                   filename=f'pairwise-graphs/{spl}-{pair[0]}-{pair[1]}.png', colors=color)
 
-def plot_spl(spl, labels):
+def plot_spl(spl, labels, xoffset=0):
     display(Markdown('# {}'.format(spl)))
     rt_filenames = [
         'csv/running_time/totalTime{}{}.csv'.format(spl, label) for label in labels]
     factor = 1e-3
     rt_df = read_data(spl, rt_filenames, labels, factor=factor)
     process(rt_df, spl, labels, '{}: Running Time'.format(spl), header='Running Time',
-            ylabel='Running Time (s)', factor=1.0/1000.0, table_suffix='rt',
+            ylabel='Running Time (s)', xoffset=xoffset, factor=1.0/1000.0, table_suffix='rt',
             table_description="Average running time (s) (statistically smallest value in bold)")
 
     mem_filenames = [
         'csv/memory_usage/totalMemory{}{}.csv'.format(spl, label) for label in labels]
     mem_df = read_data(spl, mem_filenames, labels)
     process(mem_df, spl, labels, '{}: Memory Usage'.format(spl), header='Memory Usage',
-            ylabel='Memory Usage (MB)', table_suffix='mem',
+            ylabel='Memory Usage (MB)', xoffset=xoffset, table_suffix='mem',
             table_description="Average memory usage (MB) (statistically smallest value in bold)")
 
     l1 = labels[0]
@@ -64,18 +66,19 @@ def plot_spl(spl, labels):
     pd.set_option('precision', 2)
     with open('tables/effect-size/{}.md'.format(spl), 'w') as f:
         test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)',
-                                          suffix2='Memory Usage (MB)', errors1=True, errors2=False, formatting='markdown')
+                                          suffix2='Memory Usage (MB)', errors1=True, errors2=False, formatting='markdown', idx_offset=xoffset)
         f.write(test_df.to_markdown(index=False))
     with open('tables/effect-size/{}.tex'.format(spl), 'w') as f:
         test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)',
-                                          suffix2='Memory Usage (MB)', errors1=True, errors2=False, formatting='latex')
+                                          suffix2='Memory Usage (MB)', errors1=True, errors2=False, formatting='latex', idx_offset=xoffset)
         f.write(test_df.to_latex(index=False, escape=False))
 
-def process(df, spl, labels, title, header=None, xlabel='Evolution', ylabel='', yscale='log', factor=1.0, table_suffix='', table_description=None):
+def process(df, spl, labels, title, header=None, xlabel='Evolution', ylabel='', yscale='log', xoffset=1, factor=1.0, table_suffix='', table_description=None):
     if header:
         display(Markdown('## {}'.format(header)))
     make_line_graph(df, spl, labels, title=title,
-                    xlabel=xlabel, ylabel=ylabel, yscale='log', filename=f'graphs/{spl}.png')
+                    xlabel=xlabel, ylabel=ylabel, yscale='log', xoffset=xoffset,
+                    filename=f'graphs/{spl}.png')
 
     test_results = test_all_evolutions_pairs(df, labels)
 
