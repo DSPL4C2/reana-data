@@ -61,7 +61,7 @@ def plot_spl(spl, labels, xoffset=0):
                       factor=factor, trim_columns=True)
     mem_df = read_data(spl, mem_filenames, labels, trim_columns=True)
     test_df = get_test_comparison_dfs(
-        spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)', suffix2='Memory Usage (MB)', errors1=True, errors2=False)
+        spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)', suffix2='Memory Usage (MB)', errors1=True, errors2=False, idx_offset=xoffset)
     display(test_df)
     pd.set_option('precision', 2)
     with open('tables/effect-size/{}.md'.format(spl), 'w') as f:
