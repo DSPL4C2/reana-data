@@ -4,7 +4,7 @@ import itertools as iter
 from utils import concat, get_num_evolutions, get_evolution_samples
 from math import sqrt
 from scipy.stats import bartlett, ttest_ind, mannwhitneyu, normaltest
-from sigfigs import format_value_error
+from sigfigs import format_value, format_value_error
 
 
 def compare_samples(s1, s2, significance=0.01):
@@ -105,8 +105,34 @@ def get_valid_labels(ordering):
             elements.append(element[0:2])
     return list(set(concat(elements)))
 
-# This cell is tasked with producing tables comparing the results of two labels,
-# including the hypothesis test, as well as the effect size.
+def get_summary_dfs(model, df1, df2, labels, suffix1=None, suffix2=None, idx_offset=0):
+    summary_df1 = get_summary_df(df1, labels, suffix=suffix1)
+    summary_df2 = get_summary_df(df2, labels, suffix=suffix2)
+
+    n1 = get_num_evolutions(df1)
+    n2 = get_num_evolutions(df2)
+
+    if (n1 != n2):
+        print("Warning: number of evolutions in df1 and df2 do not match")
+
+    model_labels = ['{} {}'.format(model, i) for i in range(idx_offset, n1 + idx_offset)]
+    model_df = pd.DataFrame({'Model': model_labels})
+
+    return pd.concat([model_df, summary_df1, summary_df2], axis=1)
+
+def get_summary_df(df, labels, suffix=None):
+    data = {}
+    new_labels = [label if suffix is None else '{} {}'.format(label, suffix) for label in labels]
+    for (label, new_label) in zip(labels, new_labels):
+        avg = np.mean(df.loc[label])
+        std = np.std(df.loc[label])
+        lines = []
+        for i in range(len(avg)):
+            line = format_value_error(avg[i], std[i])
+            lines.append(line)
+        data[new_label] = lines
+
+    return pd.DataFrame(data=data)
 
 
 def process_effect_size(d):

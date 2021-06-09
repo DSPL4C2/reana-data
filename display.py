@@ -66,6 +66,8 @@ def plot_spl(spl, labels, xoffset=0, yscale='log', output_path='results'):
     test_df = get_test_comparison_dfs(
         spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)', suffix2='Memory Usage (MB)', errors1=True, errors2=False, idx_offset=xoffset)
     display(test_df)
+    
+    # write the effect size table to markdown and latex files
     pd.set_option('precision', 2)
     with open(f'{output_path}/tables/effect-size/{spl}.md', 'w') as f:
         test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)',
@@ -75,6 +77,19 @@ def plot_spl(spl, labels, xoffset=0, yscale='log', output_path='results'):
         test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)',
                                           suffix2='Memory Usage (MB)', errors1=True, errors2=False, formatting='latex', idx_offset=xoffset)
         f.write(test_df.to_latex(index=False, escape=False))
+
+    # write the summary size table to markdown and latex files
+    rt_df = read_data(spl, rt_filenames, labels,
+                      factor=factor, trim_columns=False)
+    mem_df = read_data(spl, mem_filenames, labels, trim_columns=False)
+    pd.set_option('precision', 2)
+    summary_df = get_summary_dfs(spl, rt_df, mem_df, labels, suffix1='Runtime (s)',
+                                 suffix2='Memory Usage (MB)', idx_offset=xoffset)
+    display(summary_df)
+    with open(f'{output_path}/tables/summary/{spl}.md', 'w') as f:
+        f.write(summary_df.to_markdown(index=False))
+    with open(f'{output_path}/tables/summary/{spl}.tex', 'w') as f:
+        f.write(summary_df.to_latex(index=False))
 
 def process(df, spl, labels, title, header=None, xlabel='Evolution',
             ylabel='', yscale='log', xoffset=1, factor=1.0,

@@ -1,7 +1,10 @@
 from decimal import Decimal
 from math import log10, floor
+from utils import isnan
 
 def format_value_error(value, error):
+  if isnan(value):
+    return '--'
   if error == 0.0:
     return '{}'.format(value)
   (truncated_error, sigfigs) = process_error(error)
