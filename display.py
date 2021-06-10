@@ -59,22 +59,23 @@ def plot_spl(spl, labels, xoffset=0, yscale='log', output_path='results'):
 
     l1 = labels[0]
     l2 = labels[1]
+    l3 = labels[2] if len(labels) > 2 else None
 
     rt_df = read_data(spl, rt_filenames, labels,
-                      factor=factor, trim_columns=True)
-    mem_df = read_data(spl, mem_filenames, labels, trim_columns=True)
+                      factor=factor, trim_columns=False)
+    mem_df = read_data(spl, mem_filenames, labels, trim_columns=False)
     test_df = get_test_comparison_dfs(
-        spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)', suffix2='Memory Usage (MB)', errors1=True, errors2=False, idx_offset=xoffset)
+        spl, rt_df, mem_df, l1, l2, l3=l3, suffix1='Runtime (s)', suffix2='Memory Usage (MB)', errors1=True, errors2=False, idx_offset=xoffset)
     display(test_df)
     
     # write the effect size table to markdown and latex files
     pd.set_option('precision', 2)
     with open(f'{output_path}/tables/effect-size/{spl}.md', 'w') as f:
-        test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)',
+        test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, l3=l3, suffix1='Runtime (s)',
                                           suffix2='Memory Usage (MB)', errors1=True, errors2=False, formatting='markdown', idx_offset=xoffset)
         f.write(test_df.to_markdown(index=False))
     with open(f'{output_path}/tables/effect-size/{spl}.tex', 'w') as f:
-        test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, suffix1='Runtime (s)',
+        test_df = get_test_comparison_dfs(spl, rt_df, mem_df, l1, l2, l3=l3, suffix1='Runtime (s)',
                                           suffix2='Memory Usage (MB)', errors1=True, errors2=False, formatting='latex', idx_offset=xoffset)
         f.write(test_df.to_latex(index=False, escape=False))
 

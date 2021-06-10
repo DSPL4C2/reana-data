@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import itertools as iter
-from utils import concat, get_num_evolutions, get_evolution_samples
+from utils import concat, get_num_evolutions, get_evolution_samples, isnan
 from math import sqrt
 from scipy.stats import bartlett, ttest_ind, mannwhitneyu, normaltest
 from sigfigs import format_value, format_value_error
@@ -142,53 +142,68 @@ def process_effect_size(d):
     dists.sort(key=lambda item: item[1])
     return dists[0][0]
 
-def get_test_comparison_df(df, l1, l2, suffix=None, errors=True, formatting=None):
+
+def get_test_comparison_df(df, l1, l2, l3=None, suffix=None, errors=True, formatting=None):
     tests = test_all_evolutions(df, l1, l2)
     comparisons = [test['result'] for test in tests if test is not None]
 
-    avg1 = np.mean(df.loc[l1])
-    std1 = np.std(df.loc[l1])
-    avg2 = np.mean(df.loc[l2])
-    std2 = np.std(df.loc[l2])
+    [avg1, avg2] = [np.mean(df.loc[l]) for l in [l1, l2]]
+    [std1, std2] = [np.std(df.loc[l]) for l in [l1, l2]]
 
-    effect_size = [process_effect_size(test['d'])
-                   for test in tests if test is not None]
+    effect_size = [process_effect_size(test['d']) if test else None
+                   for test in tests]
     # hypothesis: assume that both labels obtain the same result
     hypothesis_results = ['Not Reject' if x ==
                           'eq' else 'Reject' for x in comparisons]
 
-    label1 = l1 if suffix is None else '{} {}'.format(l1, suffix)
-    label2 = l2 if suffix is None else '{} {}'.format(l2, suffix)
+    [label1, label2] = [l if suffix is None else '{} {}'.format(l, suffix) for l in [l1, l2]]
 
     lines1 = []
     lines2 = []
+    lines3 = []
 
-    for i in range(0, len(avg1)):
+    if l3:
+        avg3 = np.mean(df.loc[l3])
+        std3 = np.std(df.loc[l3])            
+        label3 = l3 if suffix is None else '{} {}'.format(l3, suffix)
+
+    n = get_num_evolutions(df)
+    for i in range(0, n):
         if errors:
             line1 = format_value_error(avg1[i], std1[i])
             line2 = format_value_error(avg2[i], std2[i])
+            line3 = format_value_error(avg3[i], std3[i]) if l3 else None
         else:
-            line1 = '{:.2f}'.format(avg1[i])
-            line2 = '{:.2f}'.format(avg2[i])
-
-        if formatting == 'markdown':
+            line1 = '--' if isnan(avg1[i]) else '{:.2f}'.format(avg1[i]) 
+            line2 = '--' if isnan(avg2[i]) else '{:.2f}'.format(avg2[i])
+            if l3:
+                line3 = '--' if isnan(avg3[i]) else '{:.2f}'.format(avg3[i])
+            
+        # we don't have to format line3 since it is not in the comparison
+        if formatting == 'markdown' and i < len(comparisons):
             line1 = f'**{line1}**' if comparisons[i] == 'lt' else line1
             line2 = f'**{line2}**' if comparisons[i] == 'gt' else line2
-        elif formatting == 'latex':
+
+        elif formatting == 'latex' and i < len(comparisons):
             line1 = '\\textbf{{{}}}'.format(line1) if comparisons[i] == 'lt' else line1
             line2 = '\\textbf{{{}}}'.format(line2) if comparisons[i] == 'gt' else line2
 
         lines1.append(line1)
         lines2.append(line2)
+        lines3.append(line3)
 
-    # data = {label1: lines1, label2: lines2,
-    #         'H0': hypothesis_results, 'Effect Size': effect_size}
-    data = {label1: lines1, label2: lines2, 'Effect Size': effect_size}
+    effect_size = [es if es else '--' for es in effect_size]
+
+    if l3:
+        data = {label1: lines1, label2: lines2, label3: lines3, 'Effect Size': effect_size}
+    else:
+        data = {label1: lines1, label2: lines2, 'Effect Size': effect_size}
+
     return pd.DataFrame(data=data)
 
-def get_test_comparison_dfs(model, df1, df2, l1, l2, suffix1=None, suffix2=None, errors1=True, errors2=True, formatting=None, idx_offset=0):
-    test_df1 = get_test_comparison_df(df1, l1, l2, suffix=suffix1, errors=errors1, formatting=formatting)
-    test_df2 = get_test_comparison_df(df2, l1, l2, suffix=suffix2, errors=errors2, formatting=formatting)
+def get_test_comparison_dfs(model, df1, df2, l1, l2, l3=None, suffix1=None, suffix2=None, errors1=True, errors2=True, formatting=None, idx_offset=0):
+    test_df1 = get_test_comparison_df(df1, l1, l2, l3=l3, suffix=suffix1, errors=errors1, formatting=formatting)
+    test_df2 = get_test_comparison_df(df2, l1, l2, l3=l3, suffix=suffix2, errors=errors2, formatting=formatting)
 
     n1 = get_num_evolutions(df1)
     n2 = get_num_evolutions(df2)

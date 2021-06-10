@@ -1,25 +1,26 @@
-\begin{tabular}{lllllll}
+\begin{tabular}{lllllllll}
 \toprule
-Model & Reana Runtime (s) &    ReanaE Runtime (s) & Effect Size & Reana Memory Usage (MB) & ReanaE Memory Usage (MB) & Effect Size \\
+Model &  Reana Runtime (s) & ReanaEord Runtime (s) & ReanaE Runtime (s) & Effect Size & Reana Memory Usage (MB) & ReanaEord Memory Usage (MB) & ReanaE Memory Usage (MB) & Effect Size \\
 \midrule
- MP 0 &         0.6 (0.3) &           0.43 (0.06) &          -- &                   36.67 &                    36.67 &          -- \\
- MP 1 &         0.5 (0.1) &  \textbf{0.36 (0.01)} &       Large &                   37.62 &           \textbf{31.55} &       Large \\
- MP 2 &       0.45 (0.09) &  \textbf{0.37 (0.02)} &       Large &                   37.64 &           \textbf{31.57} &       Large \\
- MP 3 &         0.5 (0.1) &  \textbf{0.41 (0.08)} &       Large &                   38.60 &           \textbf{31.68} &       Large \\
- MP 4 &       0.46 (0.02) &  \textbf{0.38 (0.02)} &       Large &                   39.55 &           \textbf{32.66} &       Large \\
- MP 5 &       0.52 (0.08) &  \textbf{0.38 (0.01)} &       Large &                   41.79 &           \textbf{32.66} &       Large \\
- MP 6 &       0.54 (0.03) &   \textbf{0.4 (0.01)} &       Large &                   44.66 &           \textbf{33.64} &       Large \\
- MP 7 &         0.7 (0.1) &  \textbf{0.43 (0.02)} &       Large &                   50.58 &           \textbf{35.55} &       Large \\
- MP 8 &         0.9 (0.1) &  \textbf{0.48 (0.01)} &       Large &          \textbf{27.54} &                    38.58 &       Large \\
- MP 9 &       1.16 (0.05) &   \textbf{0.6 (0.02)} &       Large &                   48.30 &           \textbf{44.66} &       Large \\
-MP 10 &       1.91 (0.08) &  \textbf{0.87 (0.02)} &       Large &                   49.76 &           \textbf{28.66} &       Large \\
-MP 11 &       3.44 (0.06) &  \textbf{1.38 (0.01)} &       Large &          \textbf{30.16} &                    41.26 &       Large \\
-MP 12 &         6.8 (0.1) &  \textbf{2.52 (0.02)} &       Large &                  253.35 &           \textbf{47.70} &       Large \\
-MP 13 &      13.82 (0.08) &   \textbf{5.0 (0.07)} &       Large &                  381.74 &          \textbf{148.86} &       Large \\
-MP 14 &        27.9 (0.3) & \textbf{10.12 (0.08)} &       Large &                  357.81 &          \textbf{320.29} &       Large \\
-MP 15 &      57.37 (0.06) &   \textbf{21.0 (0.2)} &       Large &                 1031.98 &          \textbf{225.84} &       Large \\
-MP 16 &       124.0 (2.0) &   \textbf{43.2 (0.2)} &       Large &                 1798.60 &          \textbf{481.38} &       Large \\
-MP 17 &       263.0 (1.0) &   \textbf{92.0 (2.0)} &       Large &                 2566.79 &         \textbf{1320.69} &       Large \\
-MP 18 &       546.0 (2.0) &  \textbf{216.0 (2.0)} &       Large &                 2330.42 &         \textbf{1708.61} &       Large \\
+ MP 0 & \textbf{0.6 (0.3)} &             2.0 (1.0) &        0.43 (0.06) &       Large &                   36.67 &              \textbf{36.66} &                    36.67 &      Medium \\
+ MP 1 &          0.5 (0.1) &            0.46 (0.1) &        0.36 (0.01) &          -- &                   37.62 &              \textbf{31.56} &                    31.55 &       Large \\
+ MP 2 &        0.45 (0.09) &           0.46 (0.07) &        0.37 (0.02) &          -- &                   37.64 &              \textbf{31.57} &                    31.57 &       Large \\
+ MP 3 &          0.5 (0.1) &           0.46 (0.06) &        0.41 (0.08) &          -- &                   38.60 &              \textbf{32.66} &                    31.68 &       Large \\
+ MP 4 &        0.46 (0.02) &           0.44 (0.06) &        0.38 (0.02) &          -- &                   39.55 &              \textbf{32.66} &                    32.66 &       Large \\
+ MP 5 &        0.52 (0.08) &           0.44 (0.06) &        0.38 (0.01) &          -- &                   41.79 &              \textbf{33.62} &                    32.66 &       Large \\
+ MP 6 &        0.54 (0.03) &  \textbf{0.47 (0.04)} &         0.4 (0.01) &       Large &                   44.66 &              \textbf{34.60} &                    33.64 &       Large \\
+ MP 7 &          0.7 (0.1) &   \textbf{0.5 (0.05)} &        0.43 (0.02) &       Large &                   50.58 &              \textbf{36.66} &                    35.55 &       Large \\
+ MP 8 &          0.9 (0.1) &  \textbf{0.57 (0.05)} &        0.48 (0.01) &       Large &          \textbf{27.54} &                       39.54 &                    38.58 &       Large \\
+ MP 9 &        1.16 (0.05) &  \textbf{0.72 (0.07)} &         0.6 (0.02) &       Large &                   48.30 &              \textbf{47.54} &                    44.66 &       Large \\
+MP 10 &        1.91 (0.08) &  \textbf{1.02 (0.09)} &        0.87 (0.02) &       Large &                   49.76 &              \textbf{28.66} &                    28.66 &       Large \\
+MP 11 &        3.44 (0.06) &   \textbf{1.62 (0.1)} &        1.38 (0.01) &       Large &          \textbf{30.16} &                       51.03 &                    41.26 &       Large \\
+MP 12 &          6.8 (0.1) &  \textbf{2.95 (0.08)} &        2.52 (0.02) &       Large &                  253.35 &              \textbf{43.00} &                    47.70 &       Large \\
+MP 13 &       13.82 (0.08) &   \textbf{5.8 (0.07)} &         5.0 (0.07) &       Large &                  381.74 &             \textbf{189.27} &                   148.86 &       Large \\
+MP 14 &         27.9 (0.3) &   \textbf{11.7 (0.1)} &       10.12 (0.08) &       Large &                  357.81 &                      376.60 &                   320.29 &          -- \\
+MP 15 &       57.37 (0.06) &   \textbf{24.3 (0.1)} &         21.0 (0.2) &       Large &                 1031.98 &             \textbf{773.60} &                   225.84 &       Large \\
+MP 16 &        124.0 (2.0) &   \textbf{50.5 (0.4)} &         43.2 (0.2) &       Large &                 1798.60 &             \textbf{776.42} &                   481.38 &       Large \\
+MP 17 &        263.0 (1.0) &  \textbf{109.0 (2.0)} &         92.0 (2.0) &       Large &                 2566.79 &             \textbf{838.06} &                  1320.69 &       Large \\
+MP 18 &        546.0 (2.0) &  \textbf{244.0 (5.0)} &        216.0 (2.0) &       Large &                 2330.42 &            \textbf{1816.79} &                  1708.61 &       Large \\
+MP 19 &                 -- &           552.0 (9.0) &        491.0 (7.0) &          -- &                      -- &                     3494.61 &                  3348.60 &          -- \\
 \bottomrule
 \end{tabular}
