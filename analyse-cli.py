@@ -5,6 +5,7 @@ from data_reader import *
 from plotting import *
 from stats import *
 from tabulator import *
+from os import mkdir
 
 def main():
     xoffset = 0
@@ -13,6 +14,10 @@ def main():
     output_path = 'results'
     spls = ['BSN']
     labels = ['Reana', 'ReanaE']
+
+    mkdir(output_path)
+    for path in ['graphs', 'boxplots', 'tables']:
+        mkdir(f'{output_path}/{path}')
 
     # convert data to csv
     rt_data = concat([[f'running_time/totalTime{spl}{label}' for spl in spls] for label in labels])

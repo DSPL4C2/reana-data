@@ -164,7 +164,7 @@ def get_test_comparison_df(df, l1, l2, l3=None, suffix=None, errors=True, format
 
     if l3:
         avg3 = np.mean(df.loc[l3])
-        std3 = np.std(df.loc[l3])            
+        std3 = np.std(df.loc[l3])
         label3 = l3 if suffix is None else '{} {}'.format(l3, suffix)
 
     n = get_num_evolutions(df)
@@ -174,11 +174,11 @@ def get_test_comparison_df(df, l1, l2, l3=None, suffix=None, errors=True, format
             line2 = format_value_error(avg2[i], std2[i])
             line3 = format_value_error(avg3[i], std3[i]) if l3 else None
         else:
-            line1 = '--' if isnan(avg1[i]) else '{:.2f}'.format(avg1[i]) 
+            line1 = '--' if isnan(avg1[i]) else '{:.2f}'.format(avg1[i])
             line2 = '--' if isnan(avg2[i]) else '{:.2f}'.format(avg2[i])
             if l3:
                 line3 = '--' if isnan(avg3[i]) else '{:.2f}'.format(avg3[i])
-            
+
         # we don't have to format line3 since it is not in the comparison
         if formatting == 'markdown' and i < len(comparisons):
             line1 = f'**{line1}**' if comparisons[i] == 'lt' else line1
@@ -190,7 +190,7 @@ def get_test_comparison_df(df, l1, l2, l3=None, suffix=None, errors=True, format
 
         lines1.append(line1)
         lines2.append(line2)
-        lines3.append(line3)
+        lines3.append(line3) if lf else None
 
     effect_size = [es if es else '--' for es in effect_size]
 
