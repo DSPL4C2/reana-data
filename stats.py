@@ -190,7 +190,7 @@ def get_test_comparison_df(df, l1, l2, l3=None, suffix=None, errors=True, format
 
         lines1.append(line1)
         lines2.append(line2)
-        lines3.append(line3) if lf else None
+        lines3.append(line3) if l3 else None
 
     effect_size = [es if es else '--' for es in effect_size]
 
