@@ -6,9 +6,6 @@ from plotting import *
 from stats import *
 from tabulator import *
 
-if __name__ == '__main__':
-    main()
-
 def main():
     xoffset = 0
     yscale = 'log'
@@ -137,3 +134,6 @@ def process(df, spl, labels, title, header=None, xlabel='Evolution',
 
     with open(f'{output_path}/tables/{spl}{file_suffix}.md', 'w') as f:
         f.write(table)
+
+if __name__ == '__main__':
+    main()
