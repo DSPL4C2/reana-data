@@ -16,7 +16,7 @@ def main():
     labels = ['Reana', 'ReanaE']
 
     mkdir(output_path)
-    for path in ['graphs', 'boxplots', 'tables', 'tables/effect-size']:
+    for path in ['graphs', 'boxplots', 'tables', 'tables/effect-size', 'tables/summary']:
         mkdir(f'{output_path}/{path}')
 
     # convert data to csv
