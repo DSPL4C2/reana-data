@@ -39,8 +39,9 @@ def main():
     for filename in mem_data:
             out_to_csv(f'{data_path}/{filename}.out', f'csv/{filename}.csv')
 
-    plot_spl('BSN', labels, xoffset=xoffset, yscale=yscale, output_path=output_path)
-    get_pairwise_graphs('BSN', labels, xoffset=xoffset, yscale=yscale, output_path=output_path)
+    for spl in spls:
+        plot_spl(spl, labels, xoffset=xoffset, yscale=yscale, output_path=output_path)
+        get_pairwise_graphs(spl, labels, xoffset=xoffset, yscale=yscale, output_path=output_path)
 
 def get_pairwise_graphs(spl, labels, xoffset=0, yscale='log', output_path='results'):
    rt_filenames = [
