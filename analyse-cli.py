@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import pandas as pd
 from utils import concat
@@ -14,6 +15,14 @@ def main():
     output_path = 'results'
     spls = ['BSN']
     labels = ['Reana', 'ReanaE']
+
+    if len(sys.argv) > 2:
+        data_path = sys.argv[1]
+        output_path = sys.argv[2]
+        spls = sys.argv[3:]
+        print(f'data_path: {data_path}')
+        print(f'output_path: {output_path}')
+        print(f'spls: {spls}')
 
     mkdir(output_path)
     dirs = ['graphs', 'boxplots', 'pairwise-graphs', 'tables', 'tables/effect-size', 'tables/summary']
