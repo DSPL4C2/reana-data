@@ -23,11 +23,16 @@ def main():
         print(f'data_path: {data_path}')
         print(f'output_path: {output_path}')
         print(f'spls: {spls}')
-
-    mkdir(output_path)
+    try:
+        mkdir(output_path)
+    except OSError as error:
+        pass
     dirs = ['graphs', 'boxplots', 'pairwise-graphs', 'tables', 'tables/effect-size', 'tables/summary']
     for path in dirs:
-        mkdir(f'{output_path}/{path}')
+        try:
+            mkdir(f'{output_path}/{path}')
+        except OSError as error:
+            pass
 
     # convert data to csv
     rt_data = concat([[f'running_time/totalTime{spl}{label}' for spl in spls] for label in labels])
